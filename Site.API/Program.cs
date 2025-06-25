@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
 using Site.API.Entities.IdentityUser;
 using Site.API.Extensions;
+using Site.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,9 @@ app.UseCors(opt =>
        ]);
    });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 
