@@ -28,7 +28,7 @@ public class Item
 
   public ItemStatus Status { get; set; } = ItemStatus.Active;
 
-  public bool IsPaid { get; set; } = false;
+  public bool IsPaid { get; set; } = true;
 
   public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

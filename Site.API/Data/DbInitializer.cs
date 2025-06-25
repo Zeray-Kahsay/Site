@@ -7,10 +7,6 @@ namespace Site.API.Data;
 
 public class DbInitializer
 {
-
-
-
-
   public static async Task SeedAsync(UserManager<AppUser> userManager, SiteDbContext context)
   {
     if (await userManager.Users.AnyAsync()) return;
@@ -37,7 +33,9 @@ public class DbInitializer
                     Price = 1500,
                     Location = "Oslo, Norway",
                     MinRentalDuration = 6,
-                    Status = ItemStatus.Active
+                    Status = ItemStatus.Active,
+                    IsPaid = true
+
                 },
                 new () {
                     Title = "Office Space for Sale",
@@ -47,8 +45,88 @@ public class DbInitializer
                     CategoryId = 2, // Business
                     Price = 200000,
                     Location = "Bergen, Norway",
-                    Status = ItemStatus.Active
-                }
+                    Status = ItemStatus.Active,
+                    IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 1, // Rent
+                    CategoryId = 1, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 2, // Rent
+                    CategoryId = 1, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 1, // Rent
+                    CategoryId = 2, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 2, // Rent
+                    CategoryId = 1, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 1, // Rent
+                    CategoryId = 2, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
+                  new() {
+                    Title = "Modern Apartment Downtown",
+                    Description = "Spacious 2-bedroom apartment in the city center.",
+                    OwnerId = user.Id,
+                    TypeId = 2, // Rent
+                    CategoryId = 1, // Residential
+                    Price = 1500,
+                    Location = "Oslo, Norway",
+                    MinRentalDuration = 6,
+                    Status = ItemStatus.Active,
+                                        IsPaid = true
+
+                },
             };
 
       context.Items.AddRange(items);

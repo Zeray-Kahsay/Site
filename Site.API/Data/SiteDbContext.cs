@@ -21,6 +21,10 @@ public class SiteDbContext : IdentityDbContext
        {
               base.OnModelCreating(builder);
 
+              builder.Entity<Item>()
+                     .Property(i => i.Price)
+                     .HasPrecision(18, 2);
+
               builder.Entity<Category>().HasData(
               new Category { Id = 1, Name = "Residential" },
               new Category { Id = 2, Name = "Business" }
