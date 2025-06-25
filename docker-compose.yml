@@ -4,6 +4,6 @@ services:
    container_name: siteSql
    environment:
     ACCEPT_EULA: "1"
-    MSSQL_SA_PASSWORD: Password@2
+    MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
    ports:
     - "1433:1433"
