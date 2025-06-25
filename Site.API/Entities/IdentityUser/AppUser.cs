@@ -12,7 +12,7 @@ public class AppUser : IdentityUser<int>
   public string PhotoUrl { get; set; } = string.Empty;
   public string PublicId { get; set; } = string.Empty;
   public bool IsExternalLogin { get; set; }
-  public IList<AppUserRole> UserRoles { get; set; } = [];
+  public List<AppUserRole> UserRoles { get; set; } = [];
   public List<Message> MessageSent { get; set; } = [];
   public List<Message> MessageReceived { get; set; } = [];
 

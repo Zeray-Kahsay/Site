@@ -11,7 +11,7 @@ public static class ApplicationServiceExtensions
     services.AddOpenApi();
     services.AddSwaggerGen();
     services.AddDbContext<SiteDbContext>(options =>
-      options.UseSqlServer(config.GetConnectionString("DefaultConnectionString"))
+      options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
     );
 
 
