@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getItems } from "@/lib/api/items";
+import ItemCard from "./ItemCard";
 
 export default function Listings() {
   const {
@@ -19,11 +20,7 @@ export default function Listings() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {items.map((item) => (
-        <div key={item.id} className="border rounded p-4 shadow">
-          <h2 className="font-semibold text-lg">{item.title}</h2>
-          <p>{item.location}</p>
-          <p className="text-blue-600 font-bold">{item.price} NOK</p>
-        </div>
+        <ItemCard key={item.id} item={item} />
       ))}
     </div>
   );
