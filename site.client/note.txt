@@ -1,0 +1,1 @@
+npm install @tanstack/react-query axios zod react-hook-form @radix-ui/react-dialog lucide-react clsx
