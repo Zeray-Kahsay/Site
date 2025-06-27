@@ -1,27 +1,23 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { getItems } from "@/lib/api/items";
+import { Item } from "@/types/Item";
 import ItemCard from "./ItemCard";
+import Pagination from "./Pagination";
+import { useItems } from "@/hooks/useItems";
 
 export default function Listings() {
-  const {
-    data: items = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["items"],
-    queryFn: getItems,
-  });
+  const { data, isLoading } = useItems({ pageNumber: 1, pageSize: 4 });
 
-  if (isLoading) return <p>Loading listings...</p>;
-  if (error) return <p>Something went wrong</p>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
-      ))}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {data.items.map((item: Item) => (
+          <ItemCard key={item.id} item={item} />
+        ))}
+      </div>
+      <Pagination meta={data.metaData} />
     </div>
   );
 }

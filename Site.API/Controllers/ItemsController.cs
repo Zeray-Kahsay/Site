@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Site.API.DTOs;
 using Site.API.Interfaces;
+using Site.API.RequestHelpers;
 
 namespace Site.API.Controllers;
 
@@ -14,10 +15,15 @@ public class ItemsController(IITemRepository itemRepo) : ControllerBase
 
   [HttpGet]
   [AllowAnonymous]
-  public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems([FromQuery] int? typeId, [FromQuery] int? categoryId)
+  public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems([FromQuery] ItemParams itemParams)
   {
-    var items = await _itemRepo.GetItemsAsync(typeId, categoryId);
-    return Ok(items);
+    var pagedItems = await _itemRepo.GetPaginatedItemsAsync(itemParams);
+    var result = new PaginatedResult<ItemDto>
+    {
+      MetaData = pagedItems.MetaData,
+      Items = pagedItems
+    };
+    return Ok(result);
   }
 
   [HttpGet("{id}")]

@@ -1,13 +1,14 @@
-import api from "@/lib/api/axiosApi";
-import { Item } from "@/types/Item";
+import axiosApi from "@/lib/api/axiosApi";
+import { ItemParams } from "@/types/ItemParams";
 import { useQuery } from "@tanstack/react-query";
 
-export const useItems = () => {
-  return useQuery<Item[]>({
-    queryKey: ["items"],
+export const useItems = (params: ItemParams) => {
+  return useQuery({
+    queryKey: ["items", params],
     queryFn: async () => {
-      const res = await api.get("/items");
-      return res.data;
+      const response = await axiosApi.get("api/items", { params });
+      console.log(response.data);
+      return response.data; // contains metadata and items
     },
   });
 };

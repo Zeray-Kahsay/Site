@@ -1,8 +1,10 @@
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
 using Site.API.DTOs;
 using Site.API.Entities.Item;
 using Site.API.Exceptions;
+using Site.API.Extensions;
 using Site.API.Interfaces;
 using Site.API.RequestHelpers;
 
@@ -49,8 +51,21 @@ public class ItemRepository(SiteDbContext context) : IITemRepository
                       }).ToListAsync();
   }
 
-  public Task<IEnumerable<ItemDto>> GetPaginatedItemsAsync(ItemParams itemParams)
+  public async Task<PagedList<ItemDto>> GetPaginatedItemsAsync(ItemParams itemParams)
   {
-    throw new NotImplementedException();
+    var query = _context.Items
+        .Include(i => i.Category)
+        .Include(i => i.Type)
+        .AsQueryable()
+        .Filter(itemParams)
+        .Search(itemParams.SearchTerm)
+        .Sort(itemParams.OrderBy);
+
+
+    var pagedItems = await PagedList<Item>.ToPagedList(query, itemParams.PageNumber, itemParams.PageSize);
+
+    var itemsDto = pagedItems.ToItemDtoList().ToList();
+
+    return new PagedList<ItemDto>(itemsDto, pagedItems.MetaData.TotalCount, itemParams.PageNumber, itemParams.PageSize);
   }
 }
