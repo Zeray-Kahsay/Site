@@ -4,6 +4,7 @@ using Site.API.DTOs;
 using Site.API.Entities.Item;
 using Site.API.Exceptions;
 using Site.API.Interfaces;
+using Site.API.RequestHelpers;
 
 namespace Site.API.Repositories;
 
@@ -46,5 +47,10 @@ public class ItemRepository(SiteDbContext context) : IITemRepository
                         Status = i.Status,
                         CreatedAt = i.CreatedAt
                       }).ToListAsync();
+  }
+
+  public Task<IEnumerable<ItemDto>> GetPaginatedItemsAsync(ItemParams itemParams)
+  {
+    throw new NotImplementedException();
   }
 }
