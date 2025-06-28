@@ -10,6 +10,7 @@ public static class ApplicationServiceExtensions
   public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
   {
     services.AddScoped<IITemRepository, ItemRepository>();
+    services.AddScoped<IClientData, ClientDataRepository>();
     services.AddControllers();
     services.AddOpenApi();
     services.AddSwaggerGen();
