@@ -1,5 +1,8 @@
 using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Site.API.Data;
 using Site.API.Entities.IdentityUser;
 
@@ -20,19 +23,19 @@ public static class IdentityServiceExtensions
         .AddSignInManager<SignInManager<AppUser>>()
         .AddDefaultTokenProviders();
 
-    // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    // .AddJwtBearer(options =>
-    // {
-    //   var tokeyKey = config["TokenKey"] ?? throw new Exception("TokenKey not found");
-    //   options.TokenValidationParameters = new TokenValidationParameters
-    //   {
-    //     ValidateIssuerSigningKey = true,
-    //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokeyKey)),
-    //     ValidateIssuer = false,
-    //     ValidateAudience = false
-    //   };
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+   .AddJwtBearer(options =>
+   {
+     var tokeyKey = config["TokenKey"] ?? throw new Exception("TokenKey not found");
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+       ValidateIssuerSigningKey = true,
+       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokeyKey)),
+       ValidateIssuer = false,
+       ValidateAudience = false
+     };
 
-    // });
+   });
 
     return services;
 

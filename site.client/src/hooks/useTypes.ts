@@ -1,4 +1,4 @@
-import { Type } from "@/components/FilterBar";
+import { Type } from "@/components/items/FilterBar";
 import axiosApi from "@/lib/api/axiosApi";
 import { useQuery } from "@tanstack/react-query";
 

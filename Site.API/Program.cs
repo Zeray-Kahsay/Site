@@ -39,14 +39,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// seeding data
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<SiteDbContext>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    await DbInitializer.SeedAsync(userManager, context);
+    await DbInitializer.SeedAsync(userManager, context, roleManager);
 }
 catch (Exception ex)
 {

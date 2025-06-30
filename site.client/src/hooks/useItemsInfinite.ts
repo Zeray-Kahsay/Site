@@ -18,7 +18,7 @@ export const useItemsInfinite = (params: ItemParams) => {
       );
       return response.data;
     },
-    initialPageParam: 1, // ✅ Required in v5
+    initialPageParam: 1, //  Required in v5
     getNextPageParam: (lastPage) => {
       const { currentPage, totalPages } = lastPage.metaData;
       return currentPage < totalPages ? currentPage + 1 : undefined;
