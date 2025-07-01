@@ -10,5 +10,6 @@ public interface IITemRepository
   Task<IEnumerable<ItemDto>> GetItemsAsync(int? typeId, int? categoryId); // TO DO: Remove later 
   Task<PagedList<ItemDto>> GetPaginatedItemsAsync(ItemParams itemParams);
   Task<Item?> GetItemByIdAsync(int id);
+  Task<ItemDto> AddItemAsync(CreateItemDto createItemDto, int userId);
 
 }

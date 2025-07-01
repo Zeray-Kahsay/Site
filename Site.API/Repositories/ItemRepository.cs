@@ -1,4 +1,5 @@
 using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
 using Site.API.DTOs;
@@ -13,6 +14,34 @@ namespace Site.API.Repositories;
 public class ItemRepository(SiteDbContext context) : IITemRepository
 {
   private readonly SiteDbContext _context = context;
+
+  public async Task<ItemDto> AddItemAsync(CreateItemDto createItemDto, int userId)
+  {
+    var newItem = new Item
+    {
+      Title = createItemDto.Title,
+      Description = createItemDto.Description,
+      Location = createItemDto.Location,
+      Price = createItemDto.Price,
+      CategoryId = createItemDto.CategoryId,
+      TypeId = createItemDto.TypeId,
+      OwnerId = userId,
+      CreatedAt = DateTime.UtcNow
+    };
+
+    _context.Items.Add(newItem);
+
+    if (await _context.SaveChangesAsync() < 0) throw new BadRequestException("Failed to creae an item");
+
+    return new ItemDto
+    {
+      Id = newItem.Id,
+      Title = newItem.Title,
+      Location = newItem.Location,
+      Price = newItem.Price,
+      CreatedAt = newItem.CreatedAt
+    };
+  }
 
   public async Task<Item?> GetItemByIdAsync(int id)
   {
