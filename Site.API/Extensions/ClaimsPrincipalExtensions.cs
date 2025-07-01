@@ -10,7 +10,7 @@ public static class ClaimsPrincipalExtensions
   public static string GetUsername(this ClaimsPrincipal user)
   {
     var username = user.FindFirstValue(ClaimTypes.Name) ??
-      throw new NotFoundException("Cannot get username from token");
+      throw new UnauthorizedException("Cannot get username from token, UNAUTHORIZED!");
 
     return username;
   }
@@ -18,7 +18,7 @@ public static class ClaimsPrincipalExtensions
   public static int GetUserId(this ClaimsPrincipal user)
   {
     var Id = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier) ??
-      throw new NotFoundException("Cannot get user id from token"));
+      throw new UnauthorizedException("Cannot get user id from token, UNAUTHORIZED!"));
 
     return Id;
   }

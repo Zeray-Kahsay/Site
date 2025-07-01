@@ -111,7 +111,7 @@ const ItemForm = () => {
       <div>
         <select
           {...register("typeId", { required: true })}
-          className="w-full p-2 border rounded tracking-widest"
+          className="w-full p-2 border rounded tracking-widest "
         >
           <option value="">Select type</option>
           {loadingTypes ? (
