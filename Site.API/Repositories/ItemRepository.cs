@@ -1,5 +1,3 @@
-using Azure;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
 using Site.API.DTOs;

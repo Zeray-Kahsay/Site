@@ -1,5 +1,3 @@
-using System;
-
 namespace Site.API.DTOs;
 
 public record CategoryDto

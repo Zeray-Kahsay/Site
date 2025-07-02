@@ -1,15 +1,24 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
+using Site.API.DTOs.Auth;
 using Site.API.Entities.IdentityUser;
 using Site.API.Extensions;
 using Site.API.Middleware;
+using Site.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 
 
 
@@ -34,6 +43,24 @@ app.UseCors(opt =>
 //app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+// FluentValidation 
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (ValidationException ex)
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            Errors = ex.Errors.Select(e => e.ErrorMessage)
+        });
+    }
+});
+
 
 app.UseAuthorization();
 

@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +25,7 @@ public static class IdentityServiceExtensions
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
    .AddJwtBearer(options =>
    {
-     var tokeyKey = config["TokenKey"] ?? throw new Exception("TokenKey not found");
+     var tokeyKey = config["JwtSettings:TokenKey"] ?? throw new Exception("TokenKey not found");
      options.TokenValidationParameters = new TokenValidationParameters
      {
        ValidateIssuerSigningKey = true,

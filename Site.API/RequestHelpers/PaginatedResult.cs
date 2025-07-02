@@ -1,7 +1,6 @@
-using System;
-using Site.API.RequestHelpers;
 
-namespace Site.API.DTOs;
+
+namespace Site.API.RequestHelpers;
 
 public class PaginatedResult<T>
 {

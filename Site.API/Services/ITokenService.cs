@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Site.API.Entities.IdentityUser;
 
@@ -16,11 +17,14 @@ public class TokenService : ITokenService
 {
   private readonly SymmetricSecurityKey _key;
   private readonly UserManager<AppUser> _userManager;
+  private readonly JwtSettings _settings;
 
-  public TokenService(IConfiguration config, UserManager<AppUser> userManageer)
+  public TokenService(IConfiguration config, UserManager<AppUser> userManager, IOptions<JwtSettings> settings)
   {
-    _userManager = userManageer;
-    var tokenKey = config["TokenKey"];
+    _userManager = userManager;
+    _settings = settings.Value;
+    //var tokenKey = config["TokenKey"];
+    var tokenKey = _settings.TokenKey;
     if (string.IsNullOrEmpty(tokenKey))
     {
       throw new ArgumentNullException(nameof(tokenKey), "Token key can not be found");
