@@ -1,14 +1,12 @@
 "use client";
 
-import { registerUser } from "@/features/auth/authApi";
-import { setAuthUser } from "@/features/auth/authSlice";
-import { AppDispatch } from "@/store/store";
+import { useRegister } from "@/hooks/auth/useAuth";
 import { RegisterDto } from "@/types/auth/RegisterDto";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 
 const RegisterForm = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  //const dispatch = useDispatch<AppDispatch>();
+  const { mutate: register, isPending, error, isError } = useRegister();
   const [form, setForm] = useState<RegisterDto>({
     phoneNumber: "",
     userName: "",
@@ -24,8 +22,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      const authData = await registerUser(form);
-      dispatch(setAuthUser(authData));
+      register(form);
       alert("Registered successfully!"); // to be replaced with sth
     } catch (err) {
       console.error(err);
@@ -65,8 +62,17 @@ const RegisterForm = () => {
         required
         className="input"
       />
+
+      {isPending && <p className="text-blue-500"> Registering user... </p>}
+
+      {isError && (
+        <p className="text-red-500">
+          {error?.message || "Something went wrong. Try again"}
+        </p>
+      )}
+
       <button type="submit" className="btn">
-        Register
+        {isPending ? "Processing..." : "Register"}
       </button>
     </form>
   );
