@@ -1,5 +1,8 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Site.API.Data;
+using Site.API.DTOs.Auth;
 using Site.API.Interfaces;
 using Site.API.Repositories;
 using Site.API.Services;
@@ -14,6 +17,8 @@ public static class ApplicationServiceExtensions
     services.AddScoped<IClientData, ClientDataRepository>();
     services.AddScoped<IAuthRepository, AuthRepository>();
     services.AddScoped<ITokenService, TokenService>();
+    services.AddFluentValidationAutoValidation();
+    services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
     services.AddControllers();
     services.AddOpenApi();
     services.AddSwaggerGen();

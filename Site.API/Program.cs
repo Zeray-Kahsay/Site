@@ -1,7 +1,10 @@
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Site.API.Data;
 using Site.API.DTOs.Auth;
 using Site.API.Entities.IdentityUser;
@@ -15,9 +18,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+
+
+// Jwt token strongly typed configuration
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = builder.Configuration
+                    .GetSection("JwtSettings")
+                    .Get<JwtSettings>() ?? throw new InvalidOperationException("Jwt settings is missing");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+ .AddJwtBearer(options =>
+ {
+     var tokenKey = Encoding.UTF8.GetBytes(jwtSettings.TokenKey);
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateIssuerSigningKey = true,
+         IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
+         ValidateIssuer = false,
+         ValidateAudience = false
+     };
+
+ });
 
 
 

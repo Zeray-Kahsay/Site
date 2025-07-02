@@ -22,19 +22,7 @@ public static class IdentityServiceExtensions
         .AddSignInManager<SignInManager<AppUser>>()
         .AddDefaultTokenProviders();
 
-    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-   .AddJwtBearer(options =>
-   {
-     var tokeyKey = config["JwtSettings:TokenKey"] ?? throw new Exception("TokenKey not found");
-     options.TokenValidationParameters = new TokenValidationParameters
-     {
-       ValidateIssuerSigningKey = true,
-       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokeyKey)),
-       ValidateIssuer = false,
-       ValidateAudience = false
-     };
 
-   });
 
     return services;
 

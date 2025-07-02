@@ -13,6 +13,7 @@ public class ItemsController(IITemRepository itemRepo) : ControllerBase
 {
   private readonly IITemRepository _itemRepo = itemRepo;
 
+  [Authorize]
   [HttpPost("create-item")]
   [ProducesResponseType(StatusCodes.Status201Created)]
   public async Task<ActionResult<ItemDto>> CreateItem([FromBody] CreateItemDto createItemDto)

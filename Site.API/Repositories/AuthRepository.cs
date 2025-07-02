@@ -31,7 +31,8 @@ public class AuthRepository(
         var newUser = new AppUser
         {
             UserName = registerDto.UserName,
-            PhoneNumber = registerDto.PhoneNumber
+            PhoneNumber = registerDto.PhoneNumber,
+            Email = registerDto.Email
         };
 
         var result = await _userManager.CreateAsync(newUser, registerDto.Password);
