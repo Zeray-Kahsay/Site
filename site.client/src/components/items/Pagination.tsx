@@ -1,5 +1,8 @@
 import { MetaData } from "@/types/MetaData";
 
+
+// NB: This comp has been replaced with infinite scrolling
+
 interface Props {
   meta: MetaData;
 }

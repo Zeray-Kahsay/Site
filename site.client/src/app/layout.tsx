@@ -1,7 +1,5 @@
-import ReactQueryProvider from "@/lib/ReactQueryProvider";
 import "./globals.css";
-import { store } from "@/store/store";
-import { Provider } from "react-redux";
+import Providers from "@/components/Providers";
 
 export const metadata = {
   title: "Site.com",
@@ -16,9 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReactQueryProvider>
-          <Provider store={store}>{children}</Provider>
-        </ReactQueryProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

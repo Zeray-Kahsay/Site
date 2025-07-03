@@ -32,7 +32,7 @@ public class AuthRepository(
         {
             UserName = registerDto.UserName,
             PhoneNumber = registerDto.PhoneNumber,
-            Email = registerDto.Email
+            Email = registerDto.Email ?? string.Empty
         };
 
         var result = await _userManager.CreateAsync(newUser, registerDto.Password);
