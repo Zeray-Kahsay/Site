@@ -14,7 +14,9 @@ export default function Providers({ children }: Props) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <ReduxProvider store={store}>{children}</ReduxProvider>
+            <ReduxProvider store={store}>
+                {children}
+            </ReduxProvider>
         </QueryClientProvider>
     );
 }

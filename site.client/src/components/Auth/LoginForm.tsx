@@ -8,25 +8,33 @@ import { useForm } from "react-hook-form";
 
 
 import { useLoginUserMutation } from "@/features/auth/authApi";
+import { useAppDispatch } from '@/store/store';
+import { useRouter } from 'next/navigation';
+import { setAuthUser } from '@/features/auth/authSlice';
 
-const schema = z.object({
-  phoneNumber: z.string().min(10, 'Phone number is required'),
+const loginSchema = z.object({
+  phoneNumber: z.string().min(10, 'Phone number is required')
+    .max(15, 'Phone number is too long'),
   password: z.string().min(6, 'Password is required')
 });
 
-type LoginFormData = z.infer<typeof schema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 
 
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [loginUser, { isLoading, error, isSuccess }] = useLoginUserMutation();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
   });
 
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await loginUser(data).unwrap();
+      const user = await loginUser(data).unwrap();
+      dispatch(setAuthUser(user));
+      router.push('/')
       alert("Logged in!");
     } catch (err) {
       console.error(err);
@@ -35,11 +43,11 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-4 space-y-4">
-
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto mt-12 p-6 bg-white rounded shadow space-y-4">
+      <h2 className="text-2xl font-bold tracking-widest">Login Form</h2>
 
       <div>
-        <label className="block mb-1">Phone Number</label>
+        <label className="block mb-1 tracking-widest">Phone Number</label>
         <input
           {...register('phoneNumber')}
           className="w-full p-2 border rounded"
@@ -48,7 +56,7 @@ const LoginForm = () => {
       </div>
 
       <div>
-        <label className="block mb-1">Password</label>
+        <label className="block mb-1 tracking-widest">Password</label>
         <input
           type="password"
           {...register('password')}

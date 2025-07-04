@@ -17,12 +17,18 @@ export const authApi = createApi({
         method: 'POST',
         body: data,
       }),
+      transformErrorResponse: (response) => {
+        return {
+          status: response.status,
+          data: response.data
+        }
+      }
     }),
     loginUser: builder.mutation<UserDto, LoginDto>({
-      query: (data) => ({
+      query: (credentials) => ({
         url: 'auth/login-user',
         method: 'POST',
-        body: data,
+        body: credentials,
       }),
     }),
   }),
