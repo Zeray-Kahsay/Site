@@ -30,10 +30,6 @@ public class ForbiddenException : AppException
   public ForbiddenException(string message) : base(message, 403) { }
 }
 
-public class ValidationException : AppException
-{
-  public ValidationException(string message) : base(message, 400) { }
-}
 
 public class PaymentRequiredException : AppException
 {

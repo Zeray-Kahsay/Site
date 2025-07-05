@@ -33,7 +33,7 @@ const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await registerUser(data).unwrap();
-      router.push('auth/login')
+      router.push('/login')
       alert('registration succeeded!'); // temporary
     } catch (err) {
       console.error(err);
@@ -62,14 +62,14 @@ const RegisterForm = () => {
         {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>}
       </div>
 
-      {/* <div>
+      <div>
         <input
           {...register('email')}
           placeholder="Email Address"
           className="w-full p-2 border rounded tracking-widest"
         />
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-      </div> */}
+      </div>
 
       <div>
         <input

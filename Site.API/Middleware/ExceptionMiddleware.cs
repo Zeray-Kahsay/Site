@@ -1,4 +1,5 @@
 using System.Text.Json;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Site.API.Exceptions;
 
@@ -27,15 +28,12 @@ public class ExceptionMiddleware
     {
       _logger.LogError(ex, "An unhandled exception occured");
 
-      context.Response.ContentType = "application/problem+json";
-      //context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-      // using the custom exceptions
+
       var statusCode = ex switch
       {
         NotFoundException => StatusCodes.Status404NotFound,
         UnauthorizedException => StatusCodes.Status401Unauthorized,
         ForbiddenException => StatusCodes.Status403Forbidden,
-        ValidationException => StatusCodes.Status400BadRequest,
         ConflictException => StatusCodes.Status409Conflict,
         PaymentRequiredException => StatusCodes.Status402PaymentRequired,
         BadRequestException => StatusCodes.Status400BadRequest,
@@ -51,6 +49,17 @@ public class ExceptionMiddleware
         Instance = context.Request.Path,
         Type = $"https://httpstatuses.com/{statusCode}"
       };
+
+      // Handle FluentValidation errors specifically
+      if (ex is ValidationException validationEx)
+      {
+        problemDetails.Extensions["errors"] = validationEx.Errors
+            .GroupBy(e => e.PropertyName)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToArray()
+            );
+      }
 
       var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
       var json = JsonSerializer.Serialize(problemDetails, options);

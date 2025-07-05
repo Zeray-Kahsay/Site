@@ -6,6 +6,7 @@ using Site.API.DTOs.Auth;
 using Site.API.Interfaces;
 using Site.API.Repositories;
 using Site.API.Services;
+using Site.API.Validators;
 
 namespace Site.API.Extensions;
 
@@ -18,7 +19,8 @@ public static class ApplicationServiceExtensions
     services.AddScoped<IAuthRepository, AuthRepository>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddFluentValidationAutoValidation();
-    services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+    services.AddValidatorsFromAssemblyContaining<Program>();
+    services.AddFluentValidationAutoValidation(); // no need of injecting IValidator<T> inside controller
     services.AddControllers();
     services.AddOpenApi();
     services.AddSwaggerGen();

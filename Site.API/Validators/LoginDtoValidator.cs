@@ -1,7 +1,7 @@
-using System;
 using FluentValidation;
+using Site.API.DTOs.Auth;
 
-namespace Site.API.DTOs.Auth;
+namespace Site.API.Validators;
 
 public class LoginDtoValidator : AbstractValidator<LoginDto>
 {
