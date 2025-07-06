@@ -1,10 +1,11 @@
 import Navbar from "@/components/items/Navbar";
 import "./globals.css";
 import Providers from "@/components/Providers";
+import AppInit from "@/AppInit";
 
 export const metadata = {
   title: "Site.com",
-  description: "Cut not only hair, but time and cost",
+  description: "Easy, Secure and Cheap",
 };
 
 export default function RootLayout({
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
+          <AppInit />
           <Navbar />
           {children}
         </Providers>

@@ -25,8 +25,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 const RegisterForm = () => {
   const router = useRouter();
-  const [registerUser, { isLoading, error, isSuccess }] =
-    useRegisterUserMutation();
+  const [registerUser, { isLoading, error }] = useRegisterUserMutation();
   const {
     register,
     handleSubmit,
@@ -38,8 +37,8 @@ const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await registerUser(data).unwrap();
-      router.push('auth/login')
-      alert('registration succeeded!'); // temporary
+      router.push("auth/login");
+      alert("registration succeeded!"); // temporary
     } catch (err) {
       console.error(err);
     }
@@ -130,7 +129,7 @@ const RegisterForm = () => {
           </div>
         )}
 
-      {/* {error && (
+      {error && (
         <p className="text-red-600">
           {"status" in error
             ? typeof error.data === "string"
@@ -138,7 +137,7 @@ const RegisterForm = () => {
               : "An error occurred"
             : error.message || "An error occurred"}
         </p>
-      )} */}
+      )}
 
       <button
         type="submit"

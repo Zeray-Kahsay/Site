@@ -3,4 +3,5 @@ export interface userAuthState {
   userId: string | null;
   userName: string | null;
   phoneNumber: string | null;
+  role: string;
 }

@@ -1,9 +1,9 @@
 import { userAuthState } from "@/types/auth/userAuthState";
-import { loadUserFromStorage } from "@/utils/storage";
+import { loadUserFromLocalStorage } from "@/utils/storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-  user: loadUserFromStorage()
+const initialState: { user: userAuthState | null } = {
+  user: loadUserFromLocalStorage(),
 };
 
 const authSlice = createSlice({

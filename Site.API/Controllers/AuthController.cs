@@ -22,17 +22,17 @@ public class AuthController(IAuthRepository authRepository) : ControllerBase
     [HttpPost("register-user")]
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
-        var newUser = await _authRepo.RegisterUserAsync(registerDto);
-        return newUser is not null
-         ? CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser)
-         : BadRequest();
+        var result = await _authRepo.RegisterUserAsync(registerDto);
+        return result.IsSuccess
+         ? Ok(result)
+         : BadRequest(result);
     }
 
     [HttpPost("login-user")]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         var result = await _authRepo.LoginUserAsync(loginDto);
-        return result is not null ?
+        return result.IsSuccess ?
            Ok(result) :
            Unauthorized();
     }

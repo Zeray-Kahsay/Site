@@ -5,7 +5,6 @@ public record Result<T>
 {
     public bool IsSuccess { get; set; }
     public T? Data { get; set; }
-    public int Id { get; set; }
     public IEnumerable<string> Errors { get; set; } = [];
     public bool IsServiceUnavailable { get; set; }
 
