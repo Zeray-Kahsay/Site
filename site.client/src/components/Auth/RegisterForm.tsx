@@ -37,7 +37,7 @@ const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await registerUser(data).unwrap();
-      router.push("auth/login");
+      router.push("/login");
       alert("registration succeeded!"); // temporary
     } catch (err) {
       console.error(err);
