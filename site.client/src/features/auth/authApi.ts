@@ -1,37 +1,36 @@
+import customBaseQuery from "@/lib/api/baseApi";
 import { LoginDto } from "@/types/auth/LoginDto";
 import { RegisterDto } from "@/types/auth/RegisterDto";
 import { userAuthState } from "@/types/auth/userAuthState";
 import { UserDto } from "@/types/auth/UserDto";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Result } from "@/types/result";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
-  }),
+  baseQuery: customBaseQuery,
   endpoints: (builder) => ({
     registerUser: builder.mutation<UserDto, RegisterDto>({
-      query: (data) => ({
+      query: (data: RegisterDto) => ({
         url: "auth/register-user",
         method: "POST",
         body: data,
       }),
-      transformErrorResponse: (response) => {
+      transformErrorResponse: (response: { status: any; data: any; }) => {
         return {
           status: response.status,
           data: response.data,
         };
       },
     }),
-    loginUser: builder.mutation<userAuthState, LoginDto>({
+    loginUser: builder.mutation<Result<userAuthState>, LoginDto>({
       query: (credentials) => ({
         url: "auth/login-user",
         method: "POST",
         body: credentials,
       }),
-      transformResponse: (response: { data: UserDto }) => response.data,
-    }),
-  }),
+    })
+  })
 });
 
 export const { useRegisterUserMutation, useLoginUserMutation } = authApi;

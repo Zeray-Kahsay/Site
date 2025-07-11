@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/store";
 import { logout } from "@/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { set } from "zod";
 
 export default function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
   const userData = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, [])
+
+
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -19,6 +28,10 @@ export default function Navbar() {
     dispatch(logout());
     router.push("/auth/login");
   };
+
+  if (!isMounted) {
+    return null; // Prevents hydration mismatch
+  }
 
   return (
     <nav className="bg-indigo-500 text-white p-4">

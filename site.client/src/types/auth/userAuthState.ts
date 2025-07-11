@@ -1,7 +1,8 @@
 export interface userAuthState {
   token: string | null;
-  userId: string | null;
+  id: string | null;
   userName: string | null;
   phoneNumber: string | null;
-  role: string;
+  role: string | null;
+  email: string | null;
 }

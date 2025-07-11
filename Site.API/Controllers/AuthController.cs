@@ -34,6 +34,6 @@ public class AuthController(IAuthRepository authRepository) : ControllerBase
         var result = await _authRepo.LoginUserAsync(loginDto);
         return result.IsSuccess ?
            Ok(result) :
-           Unauthorized();
+           Unauthorized(result);
     }
 }
