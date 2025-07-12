@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Site.API.DTOs.Auth;
 using Site.API.Interfaces;
+using Site.API.RequestHelpers;
 
 namespace Site.API.Controllers;
 
@@ -20,20 +21,20 @@ public class AuthController(IAuthRepository authRepository) : ControllerBase
 
 
     [HttpPost("register-user")]
-    public async Task<IActionResult> Register(RegisterDto registerDto)
+    public async Task<Result<UserDto>> Register(RegisterDto registerDto)
     {
         var result = await _authRepo.RegisterUserAsync(registerDto);
         return result.IsSuccess
-         ? Ok(result)
-         : BadRequest(result);
+         ? result
+         : Result<UserDto>.Failure(result.Errors, result.IsServiceUnavailable);
     }
 
     [HttpPost("login-user")]
-    public async Task<IActionResult> Login(LoginDto loginDto)
+    public async Task<Result<UserDto>> Login(LoginDto loginDto)
     {
         var result = await _authRepo.LoginUserAsync(loginDto);
-        return result.IsSuccess ?
-           Ok(result) :
-           Unauthorized(result);
+        return result.IsSuccess
+            ? result
+            : Result<UserDto>.Failure(result.Errors, result.IsServiceUnavailable);
     }
 }

@@ -1,16 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-import { useLoginUserMutation } from "@/features/auth/authApi";
-import { useAppDispatch } from "@/store/store";
 import { useRouter } from "next/navigation";
-import { setAuthUser } from "@/features/auth/authSlice";
+
+import { useAppDispatch } from "@/store/store";
 import { saveUserToLocalStorage } from "@/utils/storage";
-import { userAuthState } from "@/types/auth/userAuthState";
-import { useState } from "react";
+import { useLoginUserMutation } from "@/features/auth/authApi";
+import { setAuthUser } from "@/features/auth/authSlice";
+import { ApiErrorResponse } from "@/types/shared/ApiErrorResponse";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const loginSchema = z.object({
   phoneNumber: z
@@ -25,7 +26,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 const LoginForm = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
   const {
     register,
     handleSubmit,
@@ -37,27 +38,39 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      const result = await loginUser(data).unwrap();
+    setErrorMessage(null);
 
-      if (result.isSuccess && result.data) {
-        saveUserToLocalStorage(result.data);
-        dispatch(setAuthUser(result.data));
-        router.push("/");
-        console.log("Login successful:", result.data);
+    const response = await loginUser(data);
+
+    if ("data" in response && response.data?.isSuccess) {
+      const user = response.data.data!;
+      dispatch(setAuthUser(user));
+      saveUserToLocalStorage(user);
+      router.push("/");
+    } else if (
+      "data" in response &&
+      response.data &&
+      !response.data.isSuccess
+    ) {
+      // This is a business logic failure (like wrong credentials)
+      setErrorMessage(response.data.errors?.join(", ") || "Login failed.");
+    } else if ("error" in response) {
+      const err = response.error as FetchBaseQueryError;
+      if (err.status === "FETCH_ERROR") {
+        setErrorMessage("Network error occurred.");
       } else {
-        setErrorMessage(result.errors?.join(", ") || "Login failed");
+        const apiErr = err.data as ApiErrorResponse["data"];
+        setErrorMessage(
+          apiErr?.errors?.join(", ") || apiErr?.message || "Login failed."
+        );
       }
-    } catch (err: any) {
-      console.error("Login failed:", err);
-      setErrorMessage("An unexpected error occurred.");
+    } else {
+      setErrorMessage("Unexpected error occurred. Please try again.");
     }
-
-  }
+  };
 
   return (
     <>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-xl mx-auto mt-12 p-6 bg-white rounded shadow space-y-4"
@@ -94,28 +107,14 @@ const LoginForm = () => {
         >
           {isLoading ? "Logining in ..." : "Login"}
         </button>
-
-
       </form>
-      <div className="max-w-xl mx-auto mt-1 p-3 space-y-4">
-        {error && 'data' in error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4 text-sm font-serif" role="alert">
-            <strong className="font-semibold">Login failed:</strong>
-            {(error.data as any)?.errors?.join(', ') || "Something went wrong. Please try again."}
-          </div>
-        )}
-      </div>
       {errorMessage && (
-        <div className="max-w-xl mx-auto mt-1 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          <p className="text-sm font-serif">{errorMessage}</p>
+        <div className="max-w-xl mx-auto mt-3 p-2 bg-red-100 border border-red-400 text-red-700 rounded font-serif">
+          {<div className="error">{errorMessage}</div>}
         </div>
       )}
-
-
-
     </>
-  )
+  );
 };
-
 
 export default LoginForm;

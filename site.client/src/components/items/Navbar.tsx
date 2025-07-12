@@ -6,10 +6,8 @@ import { logout } from "@/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { set } from "zod";
 
 export default function Navbar() {
-
   const [isOpen, setIsOpen] = useState(false);
   const userData = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
@@ -18,9 +16,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setIsMounted(true);
-  }, [])
-
-
+  }, []);
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -107,77 +103,74 @@ export default function Navbar() {
         </div>
       </div>
 
-      {
-        isOpen && (
-          <div className=" flex flex-col items-start mt-4 md:hidden space-y-2 bg-blue-700 p-4">
-            <Link
-              href="/profile"
-              className="hover:underline font-serif tracking-widest"
-              onClick={toggleMenu}
-            >
-              {userData?.userName?.toUpperCase()}
-            </Link>
+      {isOpen && (
+        <div className=" flex flex-col items-start mt-4 md:hidden space-y-2 bg-blue-700 p-4">
+          <Link
+            href="/profile"
+            className="hover:underline font-serif tracking-widest"
+            onClick={toggleMenu}
+          >
+            {userData?.userName?.toUpperCase()}
+          </Link>
 
-            <Link
-              href="/"
-              className="hover:underline font-serif tracking-widest"
-              onClick={toggleMenu}
-            >
-              Home
-            </Link>
+          <Link
+            href="/"
+            className="hover:underline font-serif tracking-widest"
+            onClick={toggleMenu}
+          >
+            Home
+          </Link>
 
-            <Link
-              href="/about"
-              className="hover:underline font-serif tracking-widest"
-              onClick={toggleMenu}
-            >
-              About
-            </Link>
+          <Link
+            href="/about"
+            className="hover:underline font-serif tracking-widest"
+            onClick={toggleMenu}
+          >
+            About
+          </Link>
 
-            {!userData?.userName && (
-              <>
-                <Link
-                  href="/auth/register"
-                  className="hover:underline font-serif tracking-widest"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Register
-                </Link>
-                <Link
-                  href="/auth/login"
-                  className="hover:underline font-serif tracking-widest"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
-                </Link>
-              </>
-            )}
-
-            {userData?.role === "Admin" && (
+          {!userData?.userName && (
+            <>
               <Link
-                href="/admin"
+                href="/auth/register"
                 className="hover:underline font-serif tracking-widest"
                 onClick={() => setIsOpen(false)}
               >
-                Admin
+                Register
               </Link>
-            )}
-
-            {userData?.userName && (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="hover:underline font-serif tracking-widest bg-transparent border-none cursor-pointer"
+              <Link
+                href="/auth/login"
+                className="hover:underline font-serif tracking-widest"
+                onClick={() => setIsOpen(false)}
               >
-                Logout
-              </button>
-            )}
-          </div>
-        )
-      }
-    </nav >
+                Login
+              </Link>
+            </>
+          )}
+
+          {userData?.role === "Admin" && (
+            <Link
+              href="/admin"
+              className="hover:underline font-serif tracking-widest"
+              onClick={() => setIsOpen(false)}
+            >
+              Admin
+            </Link>
+          )}
+
+          {userData?.userName && (
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="hover:underline font-serif tracking-widest bg-transparent border-none cursor-pointer"
+            >
+              Logout
+            </button>
+          )}
+        </div>
+      )}
+    </nav>
   );
 }
-

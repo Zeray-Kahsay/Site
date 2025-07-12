@@ -133,9 +133,9 @@ public class AuthRepository(
             return Result<UserDto>.Success(new UserDto
             {
                 UserName = userFromDb.UserName ?? string.Empty,
-                Id = userFromDb.Id,
                 PhoneNumber = userFromDb.PhoneNumber ?? string.Empty,
-                Token = await _tokenService.GenerateToken(userFromDb),
+                Id = userFromDb.Id,
+                Token = await _tokenService.GenerateToken(userFromDb)
             });
         }
 
